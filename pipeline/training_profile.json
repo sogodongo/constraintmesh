@@ -1,0 +1,31 @@
+{
+  "health-triage-v2": {
+    "model_version": "2.3.1",
+    "profile_generated_at": "2026-04-01T00:00:00Z",
+    "training_dataset": "health-triage-train-v4",
+    "features": {
+      "age_band": {
+        "type": "categorical",
+        "allowed_values": ["0-5", "6-17", "18-40", "41-65", "65+"],
+        "max_unknown_rate": 0.02
+      },
+      "symptom_severity": {
+        "type": "continuous",
+        "min": 0.0,
+        "max": 1.0,
+        "max_out_of_range_rate": 0.01
+      },
+      "days_symptomatic": {
+        "type": "continuous",
+        "min": 0,
+        "max": 90,
+        "max_out_of_range_rate": 0.01
+      },
+      "vital_signs_normal": {
+        "type": "categorical",
+        "allowed_values": ["true", "false", "True", "False"],
+        "max_unknown_rate": 0.01
+      }
+    }
+  }
+}
