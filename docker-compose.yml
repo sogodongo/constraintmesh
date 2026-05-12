@@ -1,0 +1,93 @@
+networks:
+  cmesh:
+    driver: bridge
+
+volumes:
+  redpanda_data:
+  minio_data:
+
+services:
+
+  redpanda:
+    image: redpandadata/redpanda:v23.3.21
+    container_name: redpanda
+    networks: [cmesh]
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+      - "8081:8081"
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+    command:
+      - redpanda
+      - start
+      - --mode=dev-container
+      - --advertise-kafka-addr=redpanda:9092
+      - --kafka-addr=0.0.0.0:9092
+      - --advertise-pandaproxy-addr=localhost:8082
+      - --schema-registry-addr=0.0.0.0:8081
+    healthcheck:
+      test: ["CMD", "rpk", "cluster", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.98.0
+    container_name: otel-collector
+    networks: [cmesh]
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - ./infra/otel-collector-config.yml:/etc/otelcol-contrib/config.yaml
+    depends_on:
+      redpanda:
+        condition: service_healthy
+
+  minio:
+    image: minio/minio:RELEASE.2024-03-15T01-07-19Z
+    container_name: minio
+    networks: [cmesh]
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    environment:
+      MINIO_ROOT_USER: constraintmesh
+      MINIO_ROOT_PASSWORD: constraintmesh_secret
+    command: server /data --console-address ":9001"
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: minio-init
+    networks: [cmesh]
+    depends_on:
+      - minio
+    entrypoint: >
+      sh -c "
+        sleep 5 &&
+        mc alias set local http://minio:9000 constraintmesh constraintmesh_secret &&
+        mc mb local/constraintmesh-audit-trail --ignore-existing &&
+        mc mb local/constraintmesh-iceberg --ignore-existing &&
+        echo 'Buckets ready'
+      "
+    restart: "no"
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.api
+    container_name: constraintmesh-api
+    networks: [cmesh]
+    ports:
+      - "8000:8000"
+    environment:
+      KAFKA_BOOTSTRAP: "redpanda:9092"
+      MINIO_ENDPOINT: "http://minio:9000"
+      MINIO_ACCESS_KEY: "constraintmesh"
+      MINIO_SECRET_KEY: "constraintmesh_secret"
+    depends_on:
+      redpanda:
+        condition: service_healthy
