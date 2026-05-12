@@ -29,6 +29,12 @@ WAREHOUSE = os.getenv("ICEBERG_WAREHOUSE", "s3://constraintmesh-iceberg")
 
 app = FastAPI(title="ConstraintMesh API", version="0.2.0")
 
+from fastapi.staticfiles import StaticFiles
+import pathlib
+dashboard_path = pathlib.Path(__file__).parent.parent / "dashboard"
+if dashboard_path.exists():
+    app.mount("/dashboard", StaticFiles(directory=str(dashboard_path), html=True), name="dashboard")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

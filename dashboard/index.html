@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConstraintMesh — Governance Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0f1117;
+    color: #e2e8f0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #1e2535;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  header h1 { font-size: 16px; font-weight: 500; color: #e2e8f0; }
+  header span { font-size: 12px; color: #64748b; }
+
+  .badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #0f3d2e;
+    color: #34d399;
+    border: 1px solid #065f46;
+  }
+
+  main { padding: 24px; max-width: 1100px; }
+
+  section { margin-bottom: 32px; }
+
+  h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+
+  .card {
+    background: #161b27;
+    border: 1px solid #1e2535;
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .card-label { font-size: 11px; color: #64748b; margin-bottom: 6px; }
+  .card-value { font-size: 24px; font-weight: 500; color: #e2e8f0; }
+  .card-sub { font-size: 11px; color: #475569; margin-top: 4px; }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead tr { border-bottom: 1px solid #1e2535; }
+  th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 500; }
+  td { padding: 10px 12px; border-bottom: 1px solid #1a2030; font-size: 13px; color: #cbd5e1; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #161b27; }
+
+  .severity-warning { color: #f59e0b; }
+  .severity-critical { color: #ef4444; }
+
+  .rule-chip {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #1e2535;
+    color: #94a3b8;
+    font-family: monospace;
+  }
+
+  .btn-ack {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 1px solid #1d9e75;
+    background: transparent;
+    color: #34d399;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-ack:hover { background: #0f3d2e; }
+  .btn-ack:disabled { opacity: 0.4; cursor: default; }
+
+  .rca-box {
+    background: #161b27;
+    border: 1px solid #1e2535;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+
+  .rca-meta { font-size: 11px; color: #64748b; margin-bottom: 8px; }
+  .rca-text { font-size: 13px; color: #94a3b8; line-height: 1.6; white-space: pre-wrap; }
+
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #34d399; display: inline-block; margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .empty { color: #475569; font-size: 13px; padding: 16px 0; }
+
+  #stream-status { font-size: 11px; color: #475569; }
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:12px">
+    <h1>ConstraintMesh</h1>
+    <span class="badge">EU AI Act</span>
+  </div>
+  <span id="stream-status"><span class="status-dot"></span>live</span>
+</header>
+
+<main>
+
+  <section>
+    <h2>Model metrics — Article 12 audit trail</h2>
+    <div class="cards" id="metrics-cards">
+      <div class="card"><div class="card-label">Loading...</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Active governance alerts — Article 9</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Rule</th>
+          <th>Score</th>
+          <th>Sigma</th>
+          <th>Severity</th>
+          <th>Detected</th>
+          <th>Article 14</th>
+        </tr>
+      </thead>
+      <tbody id="alerts-body">
+        <tr><td colspan="7" class="empty">Loading alerts...</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>RCA incident log — Article 11</h2>
+    <div id="oversight-log">
+      <div class="empty">Loading oversight records...</div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const API = "http://localhost:8001";
+
+async function loadMetrics() {
+  try {
+    const res = await fetch(`${API}/metrics`);
+    const data = await res.json();
+    const container = document.getElementById("metrics-cards");
+    if (!data.models.length) {
+      container.innerHTML = '<div class="card"><div class="card-label">No data</div></div>';
+      return;
+    }
+    container.innerHTML = data.models.map(m => `
+      <div class="card">
+        <div class="card-label">${m.model_id}</div>
+        <div class="card-value">${m.total_inferences.toLocaleString()}</div>
+        <div class="card-sub">inferences logged</div>
+      </div>
+      <div class="card">
+        <div class="card-label">High-risk rate</div>
+        <div class="card-value" style="color:${m.high_risk_rate > 0.15 ? '#ef4444' : '#34d399'}">${(m.high_risk_rate * 100).toFixed(1)}%</div>
+        <div class="card-sub">${m.high_risk_count} flagged</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Avg latency</div>
+        <div class="card-value">${m.avg_latency_ms}ms</div>
+        <div class="card-sub">p99 ${m.p99_latency_ms}ms</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Avg score</div>
+        <div class="card-value">${m.avg_score}</div>
+        <div class="card-sub">prediction score</div>
+      </div>
+    `).join("");
+  } catch(e) {
+    document.getElementById("metrics-cards").innerHTML = '<div class="card"><div class="card-label" style="color:#ef4444">API unreachable</div></div>';
+  }
+}
+
+async function loadAlerts() {
+  try {
+    const res = await fetch(`${API}/alerts?limit=15`);
+    const data = await res.json();
+    const tbody = document.getElementById("alerts-body");
+    if (!data.alerts.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty">No alerts</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.alerts.map(a => `
+      <tr id="row-${a.alert_id}">
+        <td>${a.model_id}</td>
+        <td><span class="rule-chip">${a.rule_fired.replace("rule_", "").replace(/_/g, " ")}</span></td>
+        <td>${a.current_score?.toFixed(4) ?? "—"}</td>
+        <td class="${Math.abs(a.sigma_deviation) > 3 ? 'severity-critical' : 'severity-warning'}">${a.sigma_deviation?.toFixed(3) ?? "—"}σ</td>
+        <td class="severity-${a.severity}">${a.severity}</td>
+        <td>${new Date(a.detected_at).toLocaleTimeString()}</td>
+        <td>
+          <button class="btn-ack" onclick="acknowledge('${a.alert_id}', this)">
+            Acknowledge
+          </button>
+        </td>
+      </tr>
+    `).join("");
+  } catch(e) {
+    document.getElementById("alerts-body").innerHTML = '<tr><td colspan="7" class="empty" style="color:#ef4444">Failed to load alerts</td></tr>';
+  }
+}
+
+async function acknowledge(alertId, btn) {
+  btn.disabled = true;
+  btn.textContent = "Reviewing...";
+  const reviewer = prompt("Reviewer ID:", "");
+  if (!reviewer) { btn.disabled = false; btn.textContent = "Acknowledge"; return; }
+  const notes = prompt("Notes (optional):", "");
+  try {
+    const res = await fetch(`${API}/alerts/${alertId}/acknowledge`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({reviewer_id: reviewer, notes: notes || ""})
+    });
+    if (res.ok) {
+      btn.textContent = "Acknowledged";
+      btn.style.color = "#64748b";
+      btn.style.borderColor = "#1e2535";
+    } else {
+      btn.disabled = false;
+      btn.textContent = "Acknowledge";
+    }
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = "Acknowledge";
+  }
+}
+
+async function loadOversight() {
+  try {
+    const res = await fetch(`${API}/oversight?limit=5`);
+    const data = await res.json();
+    const container = document.getElementById("oversight-log");
+    const rcaRecords = data.records.filter(r => r.rca_summary);
+    if (!rcaRecords.length) {
+      container.innerHTML = '<div class="empty">No RCA records yet</div>';
+      return;
+    }
+    container.innerHTML = rcaRecords.slice(0, 5).map(r => `
+      <div class="rca-box">
+        <div class="rca-meta">
+          ${r.model_id} &nbsp;|&nbsp; ${r.rule_fired} &nbsp;|&nbsp;
+          ${new Date(r.generated_at).toLocaleString()} &nbsp;|&nbsp;
+          Art. ${r.eu_ai_act_article}
+          ${r.requires_human_review ? '&nbsp;|&nbsp; <span style="color:#f59e0b">review required</span>' : ''}
+        </div>
+        <div class="rca-text">${r.rca_summary}</div>
+      </div>
+    `).join("");
+  } catch(e) {
+    document.getElementById("oversight-log").innerHTML = '<div class="empty" style="color:#ef4444">Failed to load oversight records</div>';
+  }
+}
+
+function connectSSE() {
+  const es = new EventSource(`${API}/stream`);
+  es.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    if (data.type === "heartbeat") return;
+    loadAlerts();
+  };
+  es.onerror = () => {
+    document.getElementById("stream-status").innerHTML = '<span style="color:#ef4444">disconnected</span>';
+    setTimeout(connectSSE, 5000);
+  };
+}
+
+loadMetrics();
+loadAlerts();
+loadOversight();
+connectSSE();
+setInterval(loadMetrics, 30000);
+setInterval(loadAlerts, 15000);
+setInterval(loadOversight, 20000);
+</script>
+</body>
+</html>
