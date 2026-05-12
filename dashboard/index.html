@@ -3,62 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ConstraintMesh</title>
+<title>ConstraintMesh — EU AI Act Governance Platform</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#111318;--bg-card:#181b22;--bg-hover:#1c1f28;--border:#252933;--border-hi:#2e3440;--text-1:#d4d8e1;--text-2:#8b92a5;--text-3:#555d6e;--accent:#4a7fd4;--green:#3a8f5c;--green-dim:#2a5c3c;--amber:#b07d2e;--amber-dim:#6b4b1a;--red:#a04040;--mono:"SF Mono","Fira Code","Consolas",monospace}
-body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",sans-serif;background:var(--bg);color:var(--text-1);font-size:13px;line-height:1.5;min-height:100vh}
+:root{
+  --bg:#111318;--bg-card:#181b22;--bg-hover:#1c1f28;
+  --border:#252933;--border-hi:#2e3440;
+  --text-1:#d4d8e1;--text-2:#8b92a5;--text-3:#555d6e;
+  --accent:#4a7fd4;--green:#3a8f5c;--green-dim:#1d3d2a;
+  --amber:#b07d2e;--amber-dim:#3d2a0d;--red:#a04040;
+  --mono:"SF Mono","Fira Code","Consolas",monospace
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text-1);font-size:13px;line-height:1.5;min-height:100vh}
 .app{display:grid;grid-template-rows:40px 1fr;min-height:100vh}
-nav{display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--border);gap:20px;background:var(--bg)}
-.nav-brand{font-size:13px;font-weight:500;color:var(--text-1);letter-spacing:-.01em}
-.nav-sep{color:var(--text-3);font-size:11px}
-.nav-tags{display:flex;gap:6px;margin-left:auto;align-items:center}
-.tag{font-size:11px;padding:1px 6px;border-radius:3px;border:1px solid var(--border-hi);color:var(--text-3);background:transparent}
-.tag-live{color:var(--green);border-color:var(--green-dim)}
-.tag-live::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-right:4px;vertical-align:middle;position:relative;top:-1px}
-.body{display:grid;grid-template-columns:200px 1fr}
-aside{border-right:1px solid var(--border);padding:16px 0}
-.sidebar-section{padding:0 12px;margin-bottom:20px}
-.sidebar-label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);padding:0 4px;margin-bottom:4px}
-.sidebar-item{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:4px;font-size:12px;color:var(--text-2);cursor:pointer;border:1px solid transparent}
-.sidebar-item:hover{background:var(--bg-hover);color:var(--text-1)}
-.sidebar-item.active{background:var(--bg-hover);color:var(--text-1);border-color:var(--border)}
-.sidebar-count{font-size:10px;background:var(--bg);border:1px solid var(--border-hi);border-radius:3px;padding:0 5px;color:var(--text-3);font-family:var(--mono)}
-.sidebar-count.amber{border-color:var(--amber-dim);color:var(--amber)}
-.system-info{padding:12px;margin:0 12px;border:1px solid var(--border);border-radius:4px;font-size:11px}
-.si-row{display:flex;justify-content:space-between;margin-bottom:4px}
-.si-row:last-child{margin-bottom:0}
-.si-key{color:var(--text-3)}
-.si-val{color:var(--text-2);font-family:var(--mono)}
-main{padding:0;overflow:auto}
-.page-header{padding:14px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:10px}
+
+/* nav */
+nav{display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--border);gap:16px;background:var(--bg);position:sticky;top:0;z-index:10}
+.nav-brand{font-size:13px;font-weight:600;color:var(--text-1)}
+.nav-sep{color:var(--text-3)}
+.nav-sub{font-size:12px;color:var(--text-3)}
+.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.tag{font-size:11px;padding:2px 7px;border-radius:3px;border:1px solid var(--border-hi);color:var(--text-3)}
+.tag-live{color:var(--green);border-color:var(--green-dim);background:#0d1f14}
+.tag-live::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-right:5px;vertical-align:middle;position:relative;top:-1px}
+
+/* layout */
+.body{display:grid;grid-template-columns:196px 1fr;height:calc(100vh - 40px);overflow:hidden}
+aside{border-right:1px solid var(--border);padding:12px 0;overflow-y:auto;background:var(--bg)}
+main{overflow-y:auto;background:var(--bg)}
+
+/* sidebar */
+.sb-section{padding:0 10px;margin-bottom:16px}
+.sb-label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);padding:0 6px;margin-bottom:3px}
+.sb-item{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:4px;font-size:12px;color:var(--text-2);cursor:default;border:1px solid transparent;user-select:none}
+.sb-item.active{background:var(--bg-hover);color:var(--text-1);border-color:var(--border)}
+.sb-badge{font-size:10px;padding:1px 5px;border-radius:3px;background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-dim);font-family:var(--mono);display:none}
+.sb-badge.show{display:inline}
+.sys-box{margin:0 10px;padding:10px;border:1px solid var(--border);border-radius:4px;font-size:11px}
+.sys-row{display:flex;justify-content:space-between;margin-bottom:3px}
+.sys-row:last-child{margin-bottom:0}
+.sys-k{color:var(--text-3)}
+.sys-v{color:var(--text-2);font-family:var(--mono)}
+
+/* content */
+.page-hd{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:8px}
 .page-title{font-size:14px;font-weight:500}
 .page-sub{font-size:12px;color:var(--text-3)}
 .content{padding:16px 20px}
-.sh{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);font-weight:500;margin-bottom:10px;margin-top:20px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+/* control bar */
+.ctrl-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:4px;background:var(--bg-card);margin-bottom:14px;flex-wrap:wrap}
+.ctrl-label{font-size:11px;color:var(--text-3);margin-right:4px}
+.ctrl-btn{font-size:12px;padding:4px 12px;border-radius:3px;border:1px solid var(--border-hi);background:transparent;color:var(--text-2);cursor:pointer;transition:all .1s}
+.ctrl-btn:hover{background:var(--bg-hover);color:var(--text-1);border-color:var(--text-3)}
+.ctrl-btn.danger{border-color:#5c2020;color:var(--red)}
+.ctrl-btn.danger:hover{background:#2a1010}
+.ctrl-btn.primary{border-color:#2a4a7c;color:var(--accent)}
+.ctrl-btn.primary:hover{background:#0d1e36}
+.ctrl-sep{width:1px;height:16px;background:var(--border);margin:0 4px}
+.ctrl-status{font-size:11px;color:var(--text-3);margin-left:auto}
+.ctrl-status .on{color:var(--amber)}
+.ctrl-status .ok{color:var(--green)}
+
+/* alert banner */
+.alert-bar{display:none;padding:8px 12px;border:1px solid var(--amber-dim);border-radius:4px;font-size:12px;color:var(--amber);background:#1a1208;margin-bottom:12px;gap:8px;align-items:flex-start}
+.alert-bar.on{display:flex}
+
+/* section headers */
+.sh{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);font-weight:500;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:10px;margin-top:18px}
 .sh:first-child{margin-top:0}
+
+/* metrics */
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden}
 .metric{background:var(--bg-card);padding:12px 14px}
 .metric-label{font-size:11px;color:var(--text-3);margin-bottom:4px}
 .metric-value{font-size:20px;font-weight:400;color:var(--text-1);letter-spacing:-.02em;font-family:var(--mono)}
-.metric-sub{font-size:11px;color:var(--text-3);margin-top:2px}
 .metric-value.warn{color:var(--amber)}
-.alert-bar{display:none;padding:8px 12px;border:1px solid var(--amber-dim);border-radius:4px;font-size:12px;color:var(--amber);background:#1a1408;margin-bottom:14px}
-.alert-bar.on{display:flex;gap:10px;align-items:flex-start}
-.timer-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.timer-label{font-size:11px;color:var(--text-3);white-space:nowrap}
-.timer-track{flex:1;height:2px;background:var(--border-hi);border-radius:1px;overflow:hidden}
-.timer-prog{height:100%;background:var(--amber);width:0;transition:width 1s linear}
-.timer-prog.green{background:var(--green)}
-.feed{font-family:var(--mono);font-size:11px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;height:160px;overflow-y:auto;padding:8px 10px}
-.feed-line{display:flex;gap:10px;padding:1px 0;color:var(--text-3)}
-.feed-line:first-child{color:var(--text-2)}
-.fl-ts{color:var(--text-3);flex-shrink:0;width:70px}
-.fl-score{width:60px}
-.fl-score.ok{color:var(--text-2)}
-.fl-score.hi{color:var(--red)}
-.fl-score.drft{color:var(--amber)}
+.metric-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+
+/* feed */
+.feed{font-family:var(--mono);font-size:11px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;height:150px;overflow-y:auto;padding:8px 10px}
+.fl{display:flex;gap:8px;padding:1px 0;color:var(--text-3)}
+.fl:first-child{color:var(--text-2)}
+.fl-ts{color:var(--text-3);width:66px;flex-shrink:0}
+.fl-s{width:58px}
+.fl-s.ok{color:var(--text-2)}
+.fl-s.hi{color:var(--red)}
+.fl-s.dr{color:var(--amber)}
 .fl-rest{color:var(--text-3)}
+
+/* table */
 .tbl-wrap{border:1px solid var(--border);border-radius:4px;overflow:hidden}
 table{width:100%;border-collapse:collapse}
 thead tr{background:var(--bg-card)}
@@ -66,90 +100,120 @@ th{text-align:left;padding:7px 10px;font-size:11px;text-transform:uppercase;lett
 td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-2);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg-hover)}
-.td-mono{font-family:var(--mono);font-size:11px}
+.td-m{font-family:var(--mono);font-size:11px}
 .td-warn{color:var(--amber)}
 .td-crit{color:var(--red)}
-.td-muted{color:var(--text-3)}
+.td-dim{color:var(--text-3)}
 .rule-tag{font-size:10px;font-family:var(--mono);padding:1px 6px;background:var(--bg);border:1px solid var(--border-hi);border-radius:3px;color:var(--text-3)}
-.btn-sm{font-size:11px;padding:3px 10px;border-radius:3px;border:1px solid var(--border-hi);background:transparent;color:var(--text-2);cursor:pointer}
-.btn-sm:hover{background:var(--bg-hover);color:var(--text-1);border-color:var(--text-3)}
-.btn-sm.acked{color:var(--text-3);cursor:default}
-.btn-sm.acked:hover{background:transparent;border-color:var(--border-hi);color:var(--text-3)}
-.rca-entry{border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:0 4px 4px 0;padding:10px 12px;margin-bottom:8px;background:var(--bg-card);display:none}
-.rca-entry.show{display:block}
+
+/* buttons */
+.btn{font-size:11px;padding:3px 10px;border-radius:3px;border:1px solid var(--border-hi);background:transparent;color:var(--text-2);cursor:pointer}
+.btn:hover{background:var(--bg-hover);color:var(--text-1);border-color:var(--text-3)}
+.btn.acked{color:var(--text-3);cursor:default;opacity:.6}
+
+/* rca */
+.rca{border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:0 4px 4px 0;padding:10px 12px;margin-bottom:8px;background:var(--bg-card)}
 .rca-meta{font-size:11px;color:var(--text-3);margin-bottom:6px;font-family:var(--mono)}
-.rca-body{font-size:12px;color:var(--text-2);line-height:1.6;white-space:pre-wrap}
-.articles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.art-card{border:1px solid var(--border);border-radius:4px;padding:10px 12px;background:var(--bg-card)}
+.rca-body{font-size:12px;color:var(--text-2);line-height:1.65;white-space:pre-wrap}
+.rca-badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:3px;background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-dim);margin-left:8px}
+
+/* articles */
+.arts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.art{border:1px solid var(--border);border-radius:4px;padding:10px 12px;background:var(--bg-card)}
 .art-num{font-size:10px;color:var(--accent);font-family:var(--mono);margin-bottom:4px}
 .art-title{font-size:12px;font-weight:500;color:var(--text-1);margin-bottom:3px}
 .art-desc{font-size:11px;color:var(--text-3);line-height:1.5}
+.art.active-now{border-color:#2a4a7c}
+
+/* empty */
+.empty{font-size:12px;color:var(--text-3);padding:12px 10px}
+
+/* footer */
 footer{border-top:1px solid var(--border);padding:10px 20px;font-size:11px;color:var(--text-3);display:flex;gap:16px}
 footer a{color:var(--text-3);text-decoration:none}
 footer a:hover{color:var(--text-2)}
-.empty-state{font-size:12px;color:var(--text-3);padding:12px 10px}
+
+/* highlight new rows */
+@keyframes rowflash{from{background:var(--amber-dim)}to{background:transparent}}
+.row-new td{animation:rowflash 1.5s ease-out}
 </style>
 </head>
 <body>
 <div class="app">
+
 <nav>
   <span class="nav-brand">ConstraintMesh</span>
   <span class="nav-sep">/</span>
-  <span style="font-size:12px;color:var(--text-3)">EU AI Act Governance</span>
-  <div class="nav-tags">
-    <span class="tag tag-live">live</span>
+  <span class="nav-sub">EU AI Act Governance Platform</span>
+  <div class="nav-right">
+    <span class="tag tag-live">live simulation</span>
     <span class="tag">health-triage-v2</span>
-    <span class="tag">Art. 9 · 10 · 11 · 12 · 14 · 26</span>
+    <span class="tag" id="nav-status">baseline building</span>
   </div>
 </nav>
+
 <div class="body">
 <aside>
-  <div class="sidebar-section">
-    <div class="sidebar-label">Views</div>
-    <div class="sidebar-item active">Overview</div>
-    <div class="sidebar-item">Inference log</div>
-    <div class="sidebar-item">Alerts <span class="sidebar-count amber" id="sb-alert-count">0</span></div>
-    <div class="sidebar-item">RCA log</div>
-    <div class="sidebar-item">Compliance report</div>
+  <div class="sb-section">
+    <div class="sb-label">Views</div>
+    <div class="sb-item active">Overview</div>
+    <div class="sb-item">Inference log</div>
+    <div class="sb-item">Alerts <span class="sb-badge" id="sb-count">0</span></div>
+    <div class="sb-item">RCA log</div>
+    <div class="sb-item">Compliance report</div>
   </div>
-  <div class="sidebar-section">
-    <div class="sidebar-label">System</div>
-    <div class="system-info">
-      <div class="si-row"><span class="si-key">model</span><span class="si-val">health-triage-v2</span></div>
-      <div class="si-row"><span class="si-key">node</span><span class="si-val">edge-nbi-01</span></div>
-      <div class="si-row"><span class="si-key">risk class</span><span class="si-val">high-risk</span></div>
-      <div class="si-row"><span class="si-key">annex III</span><span class="si-val">8(a)</span></div>
+  <div class="sb-section">
+    <div class="sb-label">System</div>
+    <div class="sys-box">
+      <div class="sys-row"><span class="sys-k">model</span><span class="sys-v">health-triage-v2</span></div>
+      <div class="sys-row"><span class="sys-k">node</span><span class="sys-v">edge-nbi-01</span></div>
+      <div class="sys-row"><span class="sys-k">risk class</span><span class="sys-v">high-risk</span></div>
+      <div class="sys-row"><span class="sys-k">annex III</span><span class="sys-v">8(a)</span></div>
+      <div class="sys-row"><span class="sys-k">status</span><span class="sys-v" id="sys-status" style="color:var(--green)">nominal</span></div>
     </div>
   </div>
-  <div class="sidebar-section">
-    <div class="sidebar-label">Articles covered</div>
-    <div class="sidebar-item">Art. 9 — Risk mgmt</div>
-    <div class="sidebar-item">Art. 10 — Data gov</div>
-    <div class="sidebar-item">Art. 11 — Tech docs</div>
-    <div class="sidebar-item">Art. 12 — Logging</div>
-    <div class="sidebar-item">Art. 14 — Oversight</div>
-    <div class="sidebar-item">Art. 26 — Retention</div>
+  <div class="sb-section">
+    <div class="sb-label">EU AI Act articles</div>
+    <div class="sb-item">Art. 9 — Risk mgmt</div>
+    <div class="sb-item">Art. 10 — Data gov</div>
+    <div class="sb-item">Art. 11 — Tech docs</div>
+    <div class="sb-item">Art. 12 — Logging</div>
+    <div class="sb-item">Art. 14 — Oversight</div>
+    <div class="sb-item">Art. 26 — Retention</div>
   </div>
 </aside>
+
 <main>
-  <div class="page-header">
+  <div class="page-hd">
     <span class="page-title">Overview</span>
-    <span class="page-sub">Real-time governance monitoring</span>
+    <span class="page-sub">Real-time governance monitoring — interact using the controls below</span>
   </div>
+
   <div class="content">
-    <div class="timer-row">
-      <span class="timer-label" id="timer-label">Drift injection in <span id="countdown">30</span>s</span>
-      <div class="timer-track"><div class="timer-prog" id="timer-prog"></div></div>
+
+    <!-- CONTROL BAR -->
+    <div class="ctrl-bar">
+      <span class="ctrl-label">Simulate:</span>
+      <button class="ctrl-btn primary" onclick="injectDrift()">Inject drift now</button>
+      <button class="ctrl-btn danger" onclick="injectAnomaly()">Inject anomaly</button>
+      <button class="ctrl-btn" onclick="resolveState()">Resolve / reset</button>
+      <div class="ctrl-sep"></div>
+      <button class="ctrl-btn" onclick="addNode()">Add edge node</button>
+      <button class="ctrl-btn" onclick="genReport()">Generate compliance report</button>
+      <span class="ctrl-status">Status: <span id="ctrl-status-text" class="ok">nominal</span></span>
     </div>
+
     <div class="alert-bar" id="alert-bar">
       <span>▲</span>
-      <span id="alert-bar-text">Art. 9 — SPC rule fired on health-triage-v2.</span>
+      <span id="alert-bar-text"></span>
     </div>
+
     <div class="sh">Metrics — Article 12 audit trail</div>
+
     <div class="metrics">
       <div class="metric">
         <div class="metric-label">Inferences logged</div>
-        <div class="metric-value" id="m-inferences">0</div>
+        <div class="metric-value" id="m-inf">0</div>
         <div class="metric-sub">Article 12 events</div>
       </div>
       <div class="metric">
@@ -165,33 +229,62 @@ footer a:hover{color:var(--text-2)}
       <div class="metric">
         <div class="metric-label">p99 latency</div>
         <div class="metric-value" id="m-p99">—</div>
-        <div class="metric-sub">avg <span id="m-avg-lat">—</span></div>
+        <div class="metric-sub">avg <span id="m-avg">—</span></div>
       </div>
     </div>
-    <div class="sh" style="margin-top:18px">Inference stream — Article 12</div>
+
+    <div class="sh" style="margin-top:16px">Inference stream — Article 12 logging</div>
     <div class="feed" id="feed">
-      <div class="feed-line"><span class="fl-ts">—</span><span class="fl-score">waiting</span><span class="fl-rest">stream starting...</span></div>
+      <div class="fl"><span class="fl-ts">—</span><span class="fl-s">waiting</span><span class="fl-rest">stream initializing...</span></div>
     </div>
-    <div class="sh">Governance alerts — Article 9</div>
+
+    <div class="sh">Governance alerts — Article 9 <span style="font-size:10px;color:var(--text-3);text-transform:none;letter-spacing:0;font-weight:400">&nbsp;— click Acknowledge to log an Article 14 oversight action</span></div>
     <div class="tbl-wrap">
       <table>
-        <thead><tr><th>Rule</th><th>Score</th><th>σ deviation</th><th>Severity</th><th>Detected</th><th>Art. 14</th></tr></thead>
+        <thead><tr><th>Rule</th><th>Score</th><th>σ</th><th>Severity</th><th>Node</th><th>Detected</th><th>Art. 14</th></tr></thead>
         <tbody id="alerts-body">
-          <tr><td colspan="6" class="empty-state">No alerts — SPC monitor active, baseline building</td></tr>
+          <tr><td colspan="7" class="empty">No alerts — SPC monitor active, waiting for baseline lock</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="sh">RCA incident summaries — Article 11</div>
-    <div id="rca-log"><div class="empty-state">RCA summaries appear here when the agent processes a drift alert</div></div>
+
+    <div class="sh">RCA incident summaries — Article 11 <span style="font-size:10px;color:var(--text-3);text-transform:none;letter-spacing:0;font-weight:400">&nbsp;— auto-generated by the Claude API agent</span></div>
+    <div id="rca-log"><div class="empty">RCA summaries appear here when a drift alert fires</div></div>
+
     <div class="sh">EU AI Act compliance coverage</div>
-    <div class="articles">
-      <div class="art-card"><div class="art-num">Article 9</div><div class="art-title">Risk management</div><div class="art-desc">SPC drift detector running continuously on prediction score stream. Four Western Electric rules active.</div></div>
-      <div class="art-card"><div class="art-num">Article 10</div><div class="art-title">Data governance</div><div class="art-desc">Feature distribution monitoring against training profile. Alerts on categorical and range violations.</div></div>
-      <div class="art-card"><div class="art-num">Article 11</div><div class="art-title">Technical documentation</div><div class="art-desc">Compliance report auto-generated from Iceberg audit trail. RCA summaries via Claude API on each alert.</div></div>
-      <div class="art-card"><div class="art-num">Article 12</div><div class="art-title">Automatic logging</div><div class="art-desc">Every inference logged via OTLP. Hashed input, prediction score, latency, risk band, ISO 8601 timestamp.</div></div>
-      <div class="art-card"><div class="art-num">Article 14</div><div class="art-title">Human oversight</div><div class="art-desc">Acknowledge action on every alert. Reviewer ID and notes logged to governance.oversight_actions topic.</div></div>
-      <div class="art-card"><div class="art-num">Article 26</div><div class="art-title">Log retention</div><div class="art-desc">Iceberg audit trail on S3. Configurable retention, minimum 6 months. Time-travel queries supported.</div></div>
+    <div class="arts">
+      <div class="art" id="art9">
+        <div class="art-num">Article 9</div>
+        <div class="art-title">Risk management</div>
+        <div class="art-desc">SPC drift detector with four Western Electric rules. Continuous monitoring from first inference.</div>
+      </div>
+      <div class="art" id="art10">
+        <div class="art-num">Article 10</div>
+        <div class="art-title">Data governance</div>
+        <div class="art-desc">Feature distribution checks against training profile. Fires on categorical and range violations.</div>
+      </div>
+      <div class="art" id="art11">
+        <div class="art-num">Article 11</div>
+        <div class="art-title">Technical documentation</div>
+        <div class="art-desc">Compliance report generated from Iceberg audit trail. RCA summaries via Claude API on each alert.</div>
+      </div>
+      <div class="art" id="art12">
+        <div class="art-num">Article 12</div>
+        <div class="art-title">Automatic logging</div>
+        <div class="art-desc">Every inference logged via OTLP. Hashed input, score, latency, risk band, ISO timestamp.</div>
+      </div>
+      <div class="art" id="art14">
+        <div class="art-num">Article 14</div>
+        <div class="art-title">Human oversight</div>
+        <div class="art-desc">Acknowledge button on every alert. Reviewer ID logged to governance.oversight_actions topic.</div>
+      </div>
+      <div class="art" id="art26">
+        <div class="art-num">Article 26</div>
+        <div class="art-title">Log retention</div>
+        <div class="art-desc">Iceberg on S3. Configurable retention, 6-month minimum. Time-travel queries supported.</div>
+      </div>
     </div>
+
   </div>
   <footer>
     <a href="https://github.com/sogodongo/constraintmesh" target="_blank">github.com/sogodongo/constraintmesh</a>
@@ -201,134 +294,265 @@ footer a:hover{color:var(--text-2)}
 </main>
 </div>
 </div>
+
 <script>
-const BASELINE_MEAN=0.72,BASELINE_STD=0.055,DRIFT_MEAN=0.41,DRIFT_AT=30;
-let tick=0,drifting=false,scores=[],latencies=[],hrCount=0,alertCount=0,rcaCount=0,spcWindow=[],baseline=null;
-function randn(){let u,v;do{u=Math.random()}while(u===0);do{v=Math.random()}while(v===0);return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+const BM=0.72,BS=0.055,DM=0.41;
+let scores=[],lats=[],hrCount=0,alertCount=0,rcaCount=0;
+let drifting=false,anomalyMode=false,nodes=['edge-nbi-01'];
+let spcWin=[],baseline=null,tick=0;
+
+function randn(){let u,v;do{u=Math.random()}while(!u);do{v=Math.random()}while(!v);return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
 function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
-function nextScore(){return clamp((drifting?DRIFT_MEAN:BASELINE_MEAN)+randn()*BASELINE_STD,0.02,0.97)}
-function nextLatency(){return clamp(41+randn()*9,12,130)}
-function ts(){return new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"})}
-function appendFeed(score,lat){
-  const feed=document.getElementById("feed");
-  const cls=score>0.75?"hi":drifting&&score<0.52?"drft":"ok";
-  const cls2=score>0.6?"high-risk":"low-risk";
-  const line=document.createElement("div");
-  line.className="feed-line";
-  line.innerHTML=`<span class="fl-ts">${ts()}</span><span class="fl-score ${cls}">${score.toFixed(4)}</span><span class="fl-rest">${cls2} &nbsp; lat=${lat.toFixed(1)}ms &nbsp; node=edge-nbi-01 &nbsp; art12=logged</span>`;
-  feed.insertBefore(line,feed.firstChild);
-  while(feed.children.length>50)feed.removeChild(feed.lastChild)
+function ts(){return new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function node(){return nodes[Math.floor(Math.random()*nodes.length)]}
+
+function nextScore(){
+  if(anomalyMode&&Math.random()<0.3) return clamp(BM+randn()*BS*5,0.01,0.99);
+  const m=drifting?DM:BM;
+  return clamp(m+randn()*BS,0.02,0.97);
 }
+
+function setStatus(s,cls){
+  document.getElementById('ctrl-status-text').textContent=s;
+  document.getElementById('ctrl-status-text').className=cls;
+  document.getElementById('sys-status').textContent=s;
+  document.getElementById('sys-status').style.color=cls==='ok'?'var(--green)':cls==='on'?'var(--amber)':'var(--red)';
+  document.getElementById('nav-status').textContent=s;
+}
+
+function appendFeed(score,lat,nd){
+  const feed=document.getElementById('feed');
+  const sc=score>0.75?'hi':drifting&&score<0.52?'dr':'ok';
+  const cls=score>0.6?'high-risk':'low-risk';
+  const d=document.createElement('div');
+  d.className='fl';
+  d.innerHTML=`<span class="fl-ts">${ts()}</span><span class="fl-s ${sc}">${score.toFixed(4)}</span><span class="fl-rest">${cls} lat=${lat.toFixed(0)}ms node=${nd} art12=logged</span>`;
+  feed.insertBefore(d,feed.firstChild);
+  while(feed.children.length>60)feed.removeChild(feed.lastChild);
+}
+
 function updateMetrics(){
   const n=scores.length;
-  document.getElementById("m-inferences").textContent=n.toLocaleString();
+  document.getElementById('m-inf').textContent=n.toLocaleString();
   if(n>0){
     const avg=scores.reduce((a,b)=>a+b,0)/n;
-    const el=document.getElementById("m-score");
+    const el=document.getElementById('m-score');
     el.textContent=avg.toFixed(4);
-    el.className="metric-value"+(drifting?" warn":"");
-    document.getElementById("m-score-sub").textContent=drifting?"drift detected":"within baseline"
+    el.className='metric-value'+(drifting||anomalyMode?' warn':'');
+    document.getElementById('m-score-sub').textContent=drifting?'drift active':anomalyMode?'anomalies detected':'within baseline';
   }
-  document.getElementById("m-hr").textContent=scores.length>0?(hrCount/scores.length*100).toFixed(1)+"%":"0%";
-  document.getElementById("m-hr-sub").textContent=hrCount+" flagged";
-  if(latencies.length>0){
-    const avg=latencies.reduce((a,b)=>a+b,0)/latencies.length;
-    const sorted=[...latencies].sort((a,b)=>a-b);
-    const p99=sorted[Math.floor(sorted.length*0.99)]||sorted[sorted.length-1];
-    document.getElementById("m-p99").textContent=p99.toFixed(0)+"ms";
-    document.getElementById("m-avg-lat").textContent=avg.toFixed(0)+"ms"
+  if(n>0){
+    document.getElementById('m-hr').textContent=(hrCount/n*100).toFixed(1)+'%';
+    document.getElementById('m-hr-sub').textContent=hrCount+' flagged';
+  }
+  if(lats.length>0){
+    const avg=lats.reduce((a,b)=>a+b,0)/lats.length;
+    const s=[...lats].sort((a,b)=>a-b);
+    const p99=s[Math.floor(s.length*.99)]||s[s.length-1];
+    document.getElementById('m-p99').textContent=p99.toFixed(0)+'ms';
+    document.getElementById('m-avg').textContent=avg.toFixed(0)+'ms';
   }
 }
-const RCA=[
-`Rule 2 fired — health-triage-v2 / edge-nbi-01
+
+const RCAS=[
+`Rule 2 fired — health-triage-v2 / ${nodes[0]}
 
 Eight consecutive inferences fell on the same side of the baseline mean (0.72), indicating a directional shift in the score distribution rather than random variance.
 
-The current average over the last 30 observations is approximately 0.41, which is 5.6 standard deviations below baseline. This is consistent with a sustained input distribution shift, not a transient spike.
+The current average has dropped to approximately 0.41 — 5.6 standard deviations below baseline. This is consistent with a sustained input distribution shift, not a transient spike.
 
-No prior alerts exist for this model, which suggests this is a new degradation event.
+Recommended actions: verify the feature pipeline against the training data profile. Check whether patient cohort composition has changed. If the shift persists beyond the next 50 inferences, escalate to model retraining review.`,
+`Rule 1 fired — anomaly detected on health-triage-v2
 
-Recommended actions: verify the feature pipeline for edge-nbi-01 against the training data profile. Check whether patient cohort composition has changed recently. If the shift persists beyond the next 50 inferences, escalate to model retraining review.`,
-`Rule 1 fired — health-triage-v2 / edge-nbi-01
+A single inference score fell more than 3.5 standard deviations from the baseline mean, triggering an immediate outlier alert.
 
-A single inference score fell 3.4 standard deviations below the baseline mean of 0.72, triggering an immediate outlier alert.
-
-Given the concurrent Rule 2 violation already recorded, this outlier is likely part of the same sustained distribution shift. The surrounding inference window is consistent with the drift pattern.
+The surrounding inference window shows otherwise normal behaviour, suggesting this is an isolated input anomaly rather than systematic drift.
 
 Reviewer should examine the specific patient record for clinical plausibility and verify input features against the training profile.`
 ];
-function fireAlert(score,sigma,rule){
+
+function fireAlert(score,sigma,rule,nd){
   alertCount++;
-  document.getElementById("sb-alert-count").textContent=alertCount;
-  const bar=document.getElementById("alert-bar");
-  bar.classList.add("on");
-  document.getElementById("alert-bar-text").textContent=`Art. 9 — ${rule} fired on health-triage-v2. Score ${score.toFixed(4)}, ${Math.abs(sigma).toFixed(2)}σ from baseline.`;
-  const tbody=document.getElementById("alerts-body");
-  if(alertCount===1)tbody.innerHTML="";
-  const sev=Math.abs(sigma)>3.5?"critical":"warning";
-  const sigCls=sev==="critical"?"td-crit":"td-warn";
-  const id="row-"+Date.now();
-  const tr=document.createElement("tr");
+  const badge=document.getElementById('sb-count');
+  badge.textContent=alertCount;
+  badge.classList.add('show');
+
+  const bar=document.getElementById('alert-bar');
+  bar.classList.add('on');
+  document.getElementById('alert-bar-text').textContent=`Art. 9 — ${rule.replace(/_/g,' ')} fired on health-triage-v2 / ${nd}. Score ${score.toFixed(4)}, ${Math.abs(sigma).toFixed(2)}σ from baseline.`;
+
+  const tbody=document.getElementById('alerts-body');
+  if(alertCount===1)tbody.innerHTML='';
+
+  const sev=Math.abs(sigma)>3.5?'critical':'warning';
+  const id='r'+Date.now();
+  const tr=document.createElement('tr');
   tr.id=id;
-  tr.innerHTML=`<td><span class="rule-tag">${rule.replace("rule_","").replace(/_/g," ")}</span></td><td class="td-mono">${score.toFixed(4)}</td><td class="td-mono ${sigCls}">${sigma.toFixed(3)}</td><td class="${sigCls}">${sev}</td><td class="td-muted">${ts()}</td><td><button class="btn-sm" onclick="ack('${id}',this)">Acknowledge</button></td>`;
+  tr.className='row-new';
+  tr.innerHTML=
+    `<td><span class="rule-tag">${rule.replace('rule_','').replace(/_/g,' ')}</span></td>`+
+    `<td class="td-m">${score.toFixed(4)}</td>`+
+    `<td class="td-m ${sev==='critical'?'td-crit':'td-warn'}">${sigma.toFixed(3)}</td>`+
+    `<td class="${sev==='critical'?'td-crit':'td-warn'}">${sev}</td>`+
+    `<td class="td-m td-dim">${nd}</td>`+
+    `<td class="td-dim">${ts()}</td>`+
+    `<td><button class="btn" onclick="ack('${id}',this)" title="Log acknowledgement — Article 14 human oversight action">Acknowledge</button></td>`;
   tbody.insertBefore(tr,tbody.firstChild);
-  if(rcaCount<2)setTimeout(()=>showRCA(rule,score,sigma),1800)
+
+  if(rcaCount<3) setTimeout(()=>showRCA(rule,score,nd),1600);
+  highlightArt('art9');
+  highlightArt('art14');
 }
-function showRCA(rule,score,sigma){
-  const log=document.getElementById("rca-log");
-  if(rcaCount===0)log.innerHTML="";
-  const div=document.createElement("div");
-  div.className="rca-entry";
-  div.innerHTML=`<div class="rca-meta">health-triage-v2 | ${rule} | ${ts()} UTC | art.11 | review required</div><div class="rca-body">${RCA[rcaCount%RCA.length]}</div>`;
+
+function showRCA(rule,score,nd){
+  const log=document.getElementById('rca-log');
+  if(rcaCount===0)log.innerHTML='';
+  const div=document.createElement('div');
+  div.className='rca';
+  div.innerHTML=
+    `<div class="rca-meta">health-triage-v2 | ${nd} | ${ts()} UTC | art.11<span class="rca-badge">review required</span></div>`+
+    `<div class="rca-body">${RCAS[rcaCount%RCAS.length]}</div>`;
   log.insertBefore(div,log.firstChild);
-  setTimeout(()=>div.classList.add("show"),30);
-  rcaCount++
+  rcaCount++;
+  highlightArt('art11');
 }
-function ack(rowId,btn){
-  btn.textContent="Acknowledged";btn.classList.add("acked");btn.disabled=true;
-  const row=document.getElementById(rowId);
-  if(row){row.style.opacity=".5"}
+
+function ack(id,btn){
+  const reviewer=prompt('Enter reviewer ID to log this Article 14 oversight action:','compliance-officer-01');
+  if(!reviewer)return;
+  const notes=prompt('Notes (optional):','Reviewed — consistent with recent patient cohort change. Monitor 24h.');
+  btn.textContent='Acknowledged';
+  btn.classList.add('acked');
+  btn.disabled=true;
+  const row=document.getElementById(id);
+  if(row){row.style.opacity='.55';}
+  const toast=document.createElement('div');
+  toast.style.cssText='position:fixed;bottom:20px;right:20px;background:#1a2a1a;border:1px solid var(--green-dim);color:var(--green);font-size:12px;padding:8px 14px;border-radius:4px;z-index:100;font-family:var(--mono)';
+  toast.textContent=`✓ Art.14 record logged — reviewer: ${reviewer}`;
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(),3000);
 }
-function checkSPC(score){
-  spcWindow.push(score);
-  if(spcWindow.length<80)return;
+
+function highlightArt(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.style.borderColor='var(--accent)';
+  setTimeout(()=>el.style.borderColor='',3000);
+}
+
+function checkSPC(score,nd){
+  spcWin.push(score);
+  if(spcWin.length<60)return;
   if(!baseline){
-    const m=spcWindow.slice(0,80).reduce((a,b)=>a+b,0)/80;
-    const v=spcWindow.slice(0,80).reduce((a,b)=>a+(b-m)**2,0)/80;
-    baseline={mean:m,std:Math.sqrt(v)};return
+    const m=spcWin.slice(0,60).reduce((a,b)=>a+b,0)/60;
+    const v=spcWin.slice(0,60).reduce((a,b)=>a+(b-m)**2,0)/60;
+    baseline={mean:m,std:Math.sqrt(v)};
+    return;
   }
-  if(!drifting)return;
+  if(!drifting&&!anomalyMode)return;
   const{mean,std}=baseline;
   const sigma=(score-mean)/std;
-  if(Math.abs(sigma)>3&&alertCount<4){
-    const rule=Math.abs(sigma)>3.5?"rule_1_beyond_3sigma":"rule_2_eight_consecutive_same_side";
-    fireAlert(score,sigma,rule);
-    spcWindow=spcWindow.slice(-40)
+  if(Math.abs(sigma)>2.8&&alertCount<6){
+    const rule=anomalyMode?'rule_1_beyond_3sigma':'rule_2_eight_consecutive_same_side';
+    fireAlert(score,sigma,rule,nd);
+    spcWin=spcWin.slice(-30);
   }
 }
+
+// PUBLIC CONTROLS
+window.injectDrift=function(){
+  drifting=true;anomalyMode=false;
+  setStatus('drift active','on');
+  document.getElementById('alert-bar').classList.add('on');
+  document.getElementById('alert-bar-text').textContent='Drift injection active — prediction score distribution has shifted. Watch for SPC alerts below.';
+  highlightArt('art9');
+};
+
+window.injectAnomaly=function(){
+  anomalyMode=true;
+  setStatus('anomaly mode','on');
+  document.getElementById('alert-bar').classList.add('on');
+  document.getElementById('alert-bar-text').textContent='Anomaly injection active — sporadic outlier scores being injected into the inference stream.';
+  highlightArt('art9');
+};
+
+window.resolveState=function(){
+  drifting=false;anomalyMode=false;
+  alertCount=0;rcaCount=0;
+  baseline=null;spcWin=[];
+  setStatus('nominal','ok');
+  document.getElementById('alert-bar').classList.remove('on');
+  document.getElementById('alerts-body').innerHTML='<tr><td colspan="7" class="empty">Resolved — SPC monitor re-baselining</td></tr>';
+  document.getElementById('rca-log').innerHTML='<div class="empty">RCA log cleared — monitoring resumed</div>';
+  document.getElementById('sb-count').textContent='0';
+  document.getElementById('sb-count').classList.remove('show');
+};
+
+window.addNode=function(){
+  const names=['edge-msa-02','edge-kla-03','edge-dse-04','edge-lgs-05'];
+  const next=names.find(n=>!nodes.includes(n));
+  if(!next){alert('Max nodes reached for demo');return;}
+  nodes.push(next);
+  const toast=document.createElement('div');
+  toast.style.cssText='position:fixed;bottom:20px;right:20px;background:#0d1e36;border:1px solid #2a4a7c;color:var(--accent);font-size:12px;padding:8px 14px;border-radius:4px;z-index:100;font-family:var(--mono)';
+  toast.textContent=`+ Node ${next} connected`;
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(),2500);
+};
+
+window.genReport=function(){
+  const n=scores.length;
+  if(n<10){alert('Not enough data yet. Let the stream run for a few seconds first.');return;}
+  const avg=scores.reduce((a,b)=>a+b,0)/n;
+  const hr=(hrCount/n*100).toFixed(1);
+  const avgLat=lats.length?(lats.reduce((a,b)=>a+b,0)/lats.length).toFixed(0):0;
+  const report=`EU AI Act Compliance Evidence Report
+Generated: ${new Date().toISOString()}
+System: health-triage-v2
+Nodes: ${nodes.join(', ')}
+
+SUMMARY
+Article 9  — Risk management: ${alertCount} drift events detected
+Article 10 — Data governance: Feature monitoring active
+Article 11 — Technical docs: ${rcaCount} RCA summaries generated
+Article 12 — Logging: ${n} inference events logged
+Article 14 — Human oversight: Acknowledge endpoint active
+Article 26 — Log retention: Iceberg audit trail active
+
+METRICS
+Avg prediction score: ${avg.toFixed(4)}
+High-risk rate: ${hr}%
+Avg latency: ${avgLat}ms
+Alerts generated: ${alertCount}
+
+Known limitations:
+- SPC detection assumes roughly normal score distributions
+- This report is a simulation — production version queries real Iceberg tables
+- See github.com/sogodongo/constraintmesh for the full implementation`;
+
+  const blob=new Blob([report],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='constraintmesh-compliance-report.txt';
+  a.click();URL.revokeObjectURL(url);
+  highlightArt('art11');
+};
+
 function step(){
   tick++;
-  const score=nextScore(),lat=nextLatency();
-  scores.push(score);latencies.push(lat);
+  const score=nextScore();
+  const lat=clamp(41+randn()*9,12,130);
+  const nd=node();
+  scores.push(score);lats.push(lat);
   if(score>0.6)hrCount++;
-  appendFeed(score,lat);updateMetrics();checkSPC(score);
-  const rem=Math.max(0,DRIFT_AT-tick);
-  document.getElementById("countdown").textContent=rem;
-  document.getElementById("timer-prog").style.width=Math.min(tick/DRIFT_AT*100,100)+"%";
-  if(tick>=DRIFT_AT&&!drifting){
-    drifting=true;
-    document.getElementById("timer-label").textContent="Drift active — score distribution shifted";
-    document.getElementById("timer-prog").className="timer-prog"
-  }
-  if(tick>DRIFT_AT+55){
-    drifting=false;tick=1;baseline=null;spcWindow=[];alertCount=0;rcaCount=0;
-    document.getElementById("sb-alert-count").textContent="0";
-    document.getElementById("timer-label").innerHTML='Drift resolved — next injection in <span id="countdown">30</span>s';
-    document.getElementById("timer-prog").className="timer-prog green";
-    document.getElementById("alert-bar").classList.remove("on")
-  }
+  appendFeed(score,lat,nd);
+  updateMetrics();
+  checkSPC(score,nd);
+  highlightArt('art12');
 }
-setInterval(step,2000);step();
+
+setInterval(step,2000);
+step();
 </script>
 </body>
 </html>
