@@ -1,5 +1,7 @@
 # ConstraintMesh
 
+**[Live Demo](https://constraint-mesh.vercel.app)** · **[GitHub](https://github.com/sogodongo/constraintmesh)**
+
 A data governance layer for high-risk AI systems, built around the technical obligations in the EU AI Act.
 
 The core problem: teams deploying AI in health, credit, and public services now have legal obligations around logging, data quality, drift monitoring, and human oversight. Most have no tooling that addresses these specifically. This project is that tooling, designed to run on the kind of infrastructure these teams actually have access to.

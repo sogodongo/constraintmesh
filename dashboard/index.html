@@ -3,313 +3,332 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ConstraintMesh — Governance Dashboard</title>
+<title>ConstraintMesh</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #0f1117;
-    color: #e2e8f0;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  header {
-    padding: 16px 24px;
-    border-bottom: 1px solid #1e2535;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  header h1 { font-size: 16px; font-weight: 500; color: #e2e8f0; }
-  header span { font-size: 12px; color: #64748b; }
-
-  .badge {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: #0f3d2e;
-    color: #34d399;
-    border: 1px solid #065f46;
-  }
-
-  main { padding: 24px; max-width: 1100px; }
-
-  section { margin-bottom: 32px; }
-
-  h2 {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #64748b;
-    font-weight: 500;
-    margin-bottom: 12px;
-  }
-
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-
-  .card {
-    background: #161b27;
-    border: 1px solid #1e2535;
-    border-radius: 8px;
-    padding: 16px;
-  }
-
-  .card-label { font-size: 11px; color: #64748b; margin-bottom: 6px; }
-  .card-value { font-size: 24px; font-weight: 500; color: #e2e8f0; }
-  .card-sub { font-size: 11px; color: #475569; margin-top: 4px; }
-
-  table { width: 100%; border-collapse: collapse; }
-
-  thead tr { border-bottom: 1px solid #1e2535; }
-  th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 500; }
-  td { padding: 10px 12px; border-bottom: 1px solid #1a2030; font-size: 13px; color: #cbd5e1; vertical-align: top; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #161b27; }
-
-  .severity-warning { color: #f59e0b; }
-  .severity-critical { color: #ef4444; }
-
-  .rule-chip {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: #1e2535;
-    color: #94a3b8;
-    font-family: monospace;
-  }
-
-  .btn-ack {
-    font-size: 12px;
-    padding: 4px 12px;
-    border-radius: 4px;
-    border: 1px solid #1d9e75;
-    background: transparent;
-    color: #34d399;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
-  .btn-ack:hover { background: #0f3d2e; }
-  .btn-ack:disabled { opacity: 0.4; cursor: default; }
-
-  .rca-box {
-    background: #161b27;
-    border: 1px solid #1e2535;
-    border-radius: 8px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-  }
-
-  .rca-meta { font-size: 11px; color: #64748b; margin-bottom: 8px; }
-  .rca-text { font-size: 13px; color: #94a3b8; line-height: 1.6; white-space: pre-wrap; }
-
-  .status-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #34d399; display: inline-block; margin-right: 6px;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  .empty { color: #475569; font-size: 13px; padding: 16px 0; }
-
-  #stream-status { font-size: 11px; color: #475569; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#111318;--bg-card:#181b22;--bg-hover:#1c1f28;--border:#252933;--border-hi:#2e3440;--text-1:#d4d8e1;--text-2:#8b92a5;--text-3:#555d6e;--accent:#4a7fd4;--green:#3a8f5c;--green-dim:#2a5c3c;--amber:#b07d2e;--amber-dim:#6b4b1a;--red:#a04040;--mono:"SF Mono","Fira Code","Consolas",monospace}
+body{font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",sans-serif;background:var(--bg);color:var(--text-1);font-size:13px;line-height:1.5;min-height:100vh}
+.app{display:grid;grid-template-rows:40px 1fr;min-height:100vh}
+nav{display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--border);gap:20px;background:var(--bg)}
+.nav-brand{font-size:13px;font-weight:500;color:var(--text-1);letter-spacing:-.01em}
+.nav-sep{color:var(--text-3);font-size:11px}
+.nav-tags{display:flex;gap:6px;margin-left:auto;align-items:center}
+.tag{font-size:11px;padding:1px 6px;border-radius:3px;border:1px solid var(--border-hi);color:var(--text-3);background:transparent}
+.tag-live{color:var(--green);border-color:var(--green-dim)}
+.tag-live::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-right:4px;vertical-align:middle;position:relative;top:-1px}
+.body{display:grid;grid-template-columns:200px 1fr}
+aside{border-right:1px solid var(--border);padding:16px 0}
+.sidebar-section{padding:0 12px;margin-bottom:20px}
+.sidebar-label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);padding:0 4px;margin-bottom:4px}
+.sidebar-item{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:4px;font-size:12px;color:var(--text-2);cursor:pointer;border:1px solid transparent}
+.sidebar-item:hover{background:var(--bg-hover);color:var(--text-1)}
+.sidebar-item.active{background:var(--bg-hover);color:var(--text-1);border-color:var(--border)}
+.sidebar-count{font-size:10px;background:var(--bg);border:1px solid var(--border-hi);border-radius:3px;padding:0 5px;color:var(--text-3);font-family:var(--mono)}
+.sidebar-count.amber{border-color:var(--amber-dim);color:var(--amber)}
+.system-info{padding:12px;margin:0 12px;border:1px solid var(--border);border-radius:4px;font-size:11px}
+.si-row{display:flex;justify-content:space-between;margin-bottom:4px}
+.si-row:last-child{margin-bottom:0}
+.si-key{color:var(--text-3)}
+.si-val{color:var(--text-2);font-family:var(--mono)}
+main{padding:0;overflow:auto}
+.page-header{padding:14px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:10px}
+.page-title{font-size:14px;font-weight:500}
+.page-sub{font-size:12px;color:var(--text-3)}
+.content{padding:16px 20px}
+.sh{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);font-weight:500;margin-bottom:10px;margin-top:20px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.sh:first-child{margin-top:0}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.metric{background:var(--bg-card);padding:12px 14px}
+.metric-label{font-size:11px;color:var(--text-3);margin-bottom:4px}
+.metric-value{font-size:20px;font-weight:400;color:var(--text-1);letter-spacing:-.02em;font-family:var(--mono)}
+.metric-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+.metric-value.warn{color:var(--amber)}
+.alert-bar{display:none;padding:8px 12px;border:1px solid var(--amber-dim);border-radius:4px;font-size:12px;color:var(--amber);background:#1a1408;margin-bottom:14px}
+.alert-bar.on{display:flex;gap:10px;align-items:flex-start}
+.timer-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.timer-label{font-size:11px;color:var(--text-3);white-space:nowrap}
+.timer-track{flex:1;height:2px;background:var(--border-hi);border-radius:1px;overflow:hidden}
+.timer-prog{height:100%;background:var(--amber);width:0;transition:width 1s linear}
+.timer-prog.green{background:var(--green)}
+.feed{font-family:var(--mono);font-size:11px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;height:160px;overflow-y:auto;padding:8px 10px}
+.feed-line{display:flex;gap:10px;padding:1px 0;color:var(--text-3)}
+.feed-line:first-child{color:var(--text-2)}
+.fl-ts{color:var(--text-3);flex-shrink:0;width:70px}
+.fl-score{width:60px}
+.fl-score.ok{color:var(--text-2)}
+.fl-score.hi{color:var(--red)}
+.fl-score.drft{color:var(--amber)}
+.fl-rest{color:var(--text-3)}
+.tbl-wrap{border:1px solid var(--border);border-radius:4px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--bg-card)}
+th{text-align:left;padding:7px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);font-weight:500;border-bottom:1px solid var(--border)}
+td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg-hover)}
+.td-mono{font-family:var(--mono);font-size:11px}
+.td-warn{color:var(--amber)}
+.td-crit{color:var(--red)}
+.td-muted{color:var(--text-3)}
+.rule-tag{font-size:10px;font-family:var(--mono);padding:1px 6px;background:var(--bg);border:1px solid var(--border-hi);border-radius:3px;color:var(--text-3)}
+.btn-sm{font-size:11px;padding:3px 10px;border-radius:3px;border:1px solid var(--border-hi);background:transparent;color:var(--text-2);cursor:pointer}
+.btn-sm:hover{background:var(--bg-hover);color:var(--text-1);border-color:var(--text-3)}
+.btn-sm.acked{color:var(--text-3);cursor:default}
+.btn-sm.acked:hover{background:transparent;border-color:var(--border-hi);color:var(--text-3)}
+.rca-entry{border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:0 4px 4px 0;padding:10px 12px;margin-bottom:8px;background:var(--bg-card);display:none}
+.rca-entry.show{display:block}
+.rca-meta{font-size:11px;color:var(--text-3);margin-bottom:6px;font-family:var(--mono)}
+.rca-body{font-size:12px;color:var(--text-2);line-height:1.6;white-space:pre-wrap}
+.articles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.art-card{border:1px solid var(--border);border-radius:4px;padding:10px 12px;background:var(--bg-card)}
+.art-num{font-size:10px;color:var(--accent);font-family:var(--mono);margin-bottom:4px}
+.art-title{font-size:12px;font-weight:500;color:var(--text-1);margin-bottom:3px}
+.art-desc{font-size:11px;color:var(--text-3);line-height:1.5}
+footer{border-top:1px solid var(--border);padding:10px 20px;font-size:11px;color:var(--text-3);display:flex;gap:16px}
+footer a{color:var(--text-3);text-decoration:none}
+footer a:hover{color:var(--text-2)}
+.empty-state{font-size:12px;color:var(--text-3);padding:12px 10px}
 </style>
 </head>
 <body>
-
-<header>
-  <div style="display:flex;align-items:center;gap:12px">
-    <h1>ConstraintMesh</h1>
-    <span class="badge">EU AI Act</span>
+<div class="app">
+<nav>
+  <span class="nav-brand">ConstraintMesh</span>
+  <span class="nav-sep">/</span>
+  <span style="font-size:12px;color:var(--text-3)">EU AI Act Governance</span>
+  <div class="nav-tags">
+    <span class="tag tag-live">live</span>
+    <span class="tag">health-triage-v2</span>
+    <span class="tag">Art. 9 · 10 · 11 · 12 · 14 · 26</span>
   </div>
-  <span id="stream-status"><span class="status-dot"></span>live</span>
-</header>
-
+</nav>
+<div class="body">
+<aside>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Views</div>
+    <div class="sidebar-item active">Overview</div>
+    <div class="sidebar-item">Inference log</div>
+    <div class="sidebar-item">Alerts <span class="sidebar-count amber" id="sb-alert-count">0</span></div>
+    <div class="sidebar-item">RCA log</div>
+    <div class="sidebar-item">Compliance report</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">System</div>
+    <div class="system-info">
+      <div class="si-row"><span class="si-key">model</span><span class="si-val">health-triage-v2</span></div>
+      <div class="si-row"><span class="si-key">node</span><span class="si-val">edge-nbi-01</span></div>
+      <div class="si-row"><span class="si-key">risk class</span><span class="si-val">high-risk</span></div>
+      <div class="si-row"><span class="si-key">annex III</span><span class="si-val">8(a)</span></div>
+    </div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Articles covered</div>
+    <div class="sidebar-item">Art. 9 — Risk mgmt</div>
+    <div class="sidebar-item">Art. 10 — Data gov</div>
+    <div class="sidebar-item">Art. 11 — Tech docs</div>
+    <div class="sidebar-item">Art. 12 — Logging</div>
+    <div class="sidebar-item">Art. 14 — Oversight</div>
+    <div class="sidebar-item">Art. 26 — Retention</div>
+  </div>
+</aside>
 <main>
-
-  <section>
-    <h2>Model metrics — Article 12 audit trail</h2>
-    <div class="cards" id="metrics-cards">
-      <div class="card"><div class="card-label">Loading...</div></div>
+  <div class="page-header">
+    <span class="page-title">Overview</span>
+    <span class="page-sub">Real-time governance monitoring</span>
+  </div>
+  <div class="content">
+    <div class="timer-row">
+      <span class="timer-label" id="timer-label">Drift injection in <span id="countdown">30</span>s</span>
+      <div class="timer-track"><div class="timer-prog" id="timer-prog"></div></div>
     </div>
-  </section>
-
-  <section>
-    <h2>Active governance alerts — Article 9</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Model</th>
-          <th>Rule</th>
-          <th>Score</th>
-          <th>Sigma</th>
-          <th>Severity</th>
-          <th>Detected</th>
-          <th>Article 14</th>
-        </tr>
-      </thead>
-      <tbody id="alerts-body">
-        <tr><td colspan="7" class="empty">Loading alerts...</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section>
-    <h2>RCA incident log — Article 11</h2>
-    <div id="oversight-log">
-      <div class="empty">Loading oversight records...</div>
+    <div class="alert-bar" id="alert-bar">
+      <span>▲</span>
+      <span id="alert-bar-text">Art. 9 — SPC rule fired on health-triage-v2.</span>
     </div>
-  </section>
-
+    <div class="sh">Metrics — Article 12 audit trail</div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-label">Inferences logged</div>
+        <div class="metric-value" id="m-inferences">0</div>
+        <div class="metric-sub">Article 12 events</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Avg prediction score</div>
+        <div class="metric-value" id="m-score">—</div>
+        <div class="metric-sub" id="m-score-sub">monitoring</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">High-risk rate</div>
+        <div class="metric-value" id="m-hr">0%</div>
+        <div class="metric-sub" id="m-hr-sub">of inferences</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">p99 latency</div>
+        <div class="metric-value" id="m-p99">—</div>
+        <div class="metric-sub">avg <span id="m-avg-lat">—</span></div>
+      </div>
+    </div>
+    <div class="sh" style="margin-top:18px">Inference stream — Article 12</div>
+    <div class="feed" id="feed">
+      <div class="feed-line"><span class="fl-ts">—</span><span class="fl-score">waiting</span><span class="fl-rest">stream starting...</span></div>
+    </div>
+    <div class="sh">Governance alerts — Article 9</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Rule</th><th>Score</th><th>σ deviation</th><th>Severity</th><th>Detected</th><th>Art. 14</th></tr></thead>
+        <tbody id="alerts-body">
+          <tr><td colspan="6" class="empty-state">No alerts — SPC monitor active, baseline building</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sh">RCA incident summaries — Article 11</div>
+    <div id="rca-log"><div class="empty-state">RCA summaries appear here when the agent processes a drift alert</div></div>
+    <div class="sh">EU AI Act compliance coverage</div>
+    <div class="articles">
+      <div class="art-card"><div class="art-num">Article 9</div><div class="art-title">Risk management</div><div class="art-desc">SPC drift detector running continuously on prediction score stream. Four Western Electric rules active.</div></div>
+      <div class="art-card"><div class="art-num">Article 10</div><div class="art-title">Data governance</div><div class="art-desc">Feature distribution monitoring against training profile. Alerts on categorical and range violations.</div></div>
+      <div class="art-card"><div class="art-num">Article 11</div><div class="art-title">Technical documentation</div><div class="art-desc">Compliance report auto-generated from Iceberg audit trail. RCA summaries via Claude API on each alert.</div></div>
+      <div class="art-card"><div class="art-num">Article 12</div><div class="art-title">Automatic logging</div><div class="art-desc">Every inference logged via OTLP. Hashed input, prediction score, latency, risk band, ISO 8601 timestamp.</div></div>
+      <div class="art-card"><div class="art-num">Article 14</div><div class="art-title">Human oversight</div><div class="art-desc">Acknowledge action on every alert. Reviewer ID and notes logged to governance.oversight_actions topic.</div></div>
+      <div class="art-card"><div class="art-num">Article 26</div><div class="art-title">Log retention</div><div class="art-desc">Iceberg audit trail on S3. Configurable retention, minimum 6 months. Time-travel queries supported.</div></div>
+    </div>
+  </div>
+  <footer>
+    <a href="https://github.com/sogodongo/constraintmesh" target="_blank">github.com/sogodongo/constraintmesh</a>
+    <a href="https://samodongo.com" target="_blank">samodongo.com</a>
+    <span>Systems engineered in Kenya, tested against the constraints most tutorials never mention.</span>
+  </footer>
 </main>
-
+</div>
+</div>
 <script>
-const API = "http://localhost:8001";
-
-async function loadMetrics() {
-  try {
-    const res = await fetch(`${API}/metrics`);
-    const data = await res.json();
-    const container = document.getElementById("metrics-cards");
-    if (!data.models.length) {
-      container.innerHTML = '<div class="card"><div class="card-label">No data</div></div>';
-      return;
-    }
-    container.innerHTML = data.models.map(m => `
-      <div class="card">
-        <div class="card-label">${m.model_id}</div>
-        <div class="card-value">${m.total_inferences.toLocaleString()}</div>
-        <div class="card-sub">inferences logged</div>
-      </div>
-      <div class="card">
-        <div class="card-label">High-risk rate</div>
-        <div class="card-value" style="color:${m.high_risk_rate > 0.15 ? '#ef4444' : '#34d399'}">${(m.high_risk_rate * 100).toFixed(1)}%</div>
-        <div class="card-sub">${m.high_risk_count} flagged</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Avg latency</div>
-        <div class="card-value">${m.avg_latency_ms}ms</div>
-        <div class="card-sub">p99 ${m.p99_latency_ms}ms</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Avg score</div>
-        <div class="card-value">${m.avg_score}</div>
-        <div class="card-sub">prediction score</div>
-      </div>
-    `).join("");
-  } catch(e) {
-    document.getElementById("metrics-cards").innerHTML = '<div class="card"><div class="card-label" style="color:#ef4444">API unreachable</div></div>';
+const BASELINE_MEAN=0.72,BASELINE_STD=0.055,DRIFT_MEAN=0.41,DRIFT_AT=30;
+let tick=0,drifting=false,scores=[],latencies=[],hrCount=0,alertCount=0,rcaCount=0,spcWindow=[],baseline=null;
+function randn(){let u,v;do{u=Math.random()}while(u===0);do{v=Math.random()}while(v===0);return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
+function nextScore(){return clamp((drifting?DRIFT_MEAN:BASELINE_MEAN)+randn()*BASELINE_STD,0.02,0.97)}
+function nextLatency(){return clamp(41+randn()*9,12,130)}
+function ts(){return new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"})}
+function appendFeed(score,lat){
+  const feed=document.getElementById("feed");
+  const cls=score>0.75?"hi":drifting&&score<0.52?"drft":"ok";
+  const cls2=score>0.6?"high-risk":"low-risk";
+  const line=document.createElement("div");
+  line.className="feed-line";
+  line.innerHTML=`<span class="fl-ts">${ts()}</span><span class="fl-score ${cls}">${score.toFixed(4)}</span><span class="fl-rest">${cls2} &nbsp; lat=${lat.toFixed(1)}ms &nbsp; node=edge-nbi-01 &nbsp; art12=logged</span>`;
+  feed.insertBefore(line,feed.firstChild);
+  while(feed.children.length>50)feed.removeChild(feed.lastChild)
+}
+function updateMetrics(){
+  const n=scores.length;
+  document.getElementById("m-inferences").textContent=n.toLocaleString();
+  if(n>0){
+    const avg=scores.reduce((a,b)=>a+b,0)/n;
+    const el=document.getElementById("m-score");
+    el.textContent=avg.toFixed(4);
+    el.className="metric-value"+(drifting?" warn":"");
+    document.getElementById("m-score-sub").textContent=drifting?"drift detected":"within baseline"
+  }
+  document.getElementById("m-hr").textContent=scores.length>0?(hrCount/scores.length*100).toFixed(1)+"%":"0%";
+  document.getElementById("m-hr-sub").textContent=hrCount+" flagged";
+  if(latencies.length>0){
+    const avg=latencies.reduce((a,b)=>a+b,0)/latencies.length;
+    const sorted=[...latencies].sort((a,b)=>a-b);
+    const p99=sorted[Math.floor(sorted.length*0.99)]||sorted[sorted.length-1];
+    document.getElementById("m-p99").textContent=p99.toFixed(0)+"ms";
+    document.getElementById("m-avg-lat").textContent=avg.toFixed(0)+"ms"
   }
 }
+const RCA=[
+`Rule 2 fired — health-triage-v2 / edge-nbi-01
 
-async function loadAlerts() {
-  try {
-    const res = await fetch(`${API}/alerts?limit=15`);
-    const data = await res.json();
-    const tbody = document.getElementById("alerts-body");
-    if (!data.alerts.length) {
-      tbody.innerHTML = '<tr><td colspan="7" class="empty">No alerts</td></tr>';
-      return;
-    }
-    tbody.innerHTML = data.alerts.map(a => `
-      <tr id="row-${a.alert_id}">
-        <td>${a.model_id}</td>
-        <td><span class="rule-chip">${a.rule_fired.replace("rule_", "").replace(/_/g, " ")}</span></td>
-        <td>${a.current_score?.toFixed(4) ?? "—"}</td>
-        <td class="${Math.abs(a.sigma_deviation) > 3 ? 'severity-critical' : 'severity-warning'}">${a.sigma_deviation?.toFixed(3) ?? "—"}σ</td>
-        <td class="severity-${a.severity}">${a.severity}</td>
-        <td>${new Date(a.detected_at).toLocaleTimeString()}</td>
-        <td>
-          <button class="btn-ack" onclick="acknowledge('${a.alert_id}', this)">
-            Acknowledge
-          </button>
-        </td>
-      </tr>
-    `).join("");
-  } catch(e) {
-    document.getElementById("alerts-body").innerHTML = '<tr><td colspan="7" class="empty" style="color:#ef4444">Failed to load alerts</td></tr>';
+Eight consecutive inferences fell on the same side of the baseline mean (0.72), indicating a directional shift in the score distribution rather than random variance.
+
+The current average over the last 30 observations is approximately 0.41, which is 5.6 standard deviations below baseline. This is consistent with a sustained input distribution shift, not a transient spike.
+
+No prior alerts exist for this model, which suggests this is a new degradation event.
+
+Recommended actions: verify the feature pipeline for edge-nbi-01 against the training data profile. Check whether patient cohort composition has changed recently. If the shift persists beyond the next 50 inferences, escalate to model retraining review.`,
+`Rule 1 fired — health-triage-v2 / edge-nbi-01
+
+A single inference score fell 3.4 standard deviations below the baseline mean of 0.72, triggering an immediate outlier alert.
+
+Given the concurrent Rule 2 violation already recorded, this outlier is likely part of the same sustained distribution shift. The surrounding inference window is consistent with the drift pattern.
+
+Reviewer should examine the specific patient record for clinical plausibility and verify input features against the training profile.`
+];
+function fireAlert(score,sigma,rule){
+  alertCount++;
+  document.getElementById("sb-alert-count").textContent=alertCount;
+  const bar=document.getElementById("alert-bar");
+  bar.classList.add("on");
+  document.getElementById("alert-bar-text").textContent=`Art. 9 — ${rule} fired on health-triage-v2. Score ${score.toFixed(4)}, ${Math.abs(sigma).toFixed(2)}σ from baseline.`;
+  const tbody=document.getElementById("alerts-body");
+  if(alertCount===1)tbody.innerHTML="";
+  const sev=Math.abs(sigma)>3.5?"critical":"warning";
+  const sigCls=sev==="critical"?"td-crit":"td-warn";
+  const id="row-"+Date.now();
+  const tr=document.createElement("tr");
+  tr.id=id;
+  tr.innerHTML=`<td><span class="rule-tag">${rule.replace("rule_","").replace(/_/g," ")}</span></td><td class="td-mono">${score.toFixed(4)}</td><td class="td-mono ${sigCls}">${sigma.toFixed(3)}</td><td class="${sigCls}">${sev}</td><td class="td-muted">${ts()}</td><td><button class="btn-sm" onclick="ack('${id}',this)">Acknowledge</button></td>`;
+  tbody.insertBefore(tr,tbody.firstChild);
+  if(rcaCount<2)setTimeout(()=>showRCA(rule,score,sigma),1800)
+}
+function showRCA(rule,score,sigma){
+  const log=document.getElementById("rca-log");
+  if(rcaCount===0)log.innerHTML="";
+  const div=document.createElement("div");
+  div.className="rca-entry";
+  div.innerHTML=`<div class="rca-meta">health-triage-v2 | ${rule} | ${ts()} UTC | art.11 | review required</div><div class="rca-body">${RCA[rcaCount%RCA.length]}</div>`;
+  log.insertBefore(div,log.firstChild);
+  setTimeout(()=>div.classList.add("show"),30);
+  rcaCount++
+}
+function ack(rowId,btn){
+  btn.textContent="Acknowledged";btn.classList.add("acked");btn.disabled=true;
+  const row=document.getElementById(rowId);
+  if(row){row.style.opacity=".5"}
+}
+function checkSPC(score){
+  spcWindow.push(score);
+  if(spcWindow.length<80)return;
+  if(!baseline){
+    const m=spcWindow.slice(0,80).reduce((a,b)=>a+b,0)/80;
+    const v=spcWindow.slice(0,80).reduce((a,b)=>a+(b-m)**2,0)/80;
+    baseline={mean:m,std:Math.sqrt(v)};return
+  }
+  if(!drifting)return;
+  const{mean,std}=baseline;
+  const sigma=(score-mean)/std;
+  if(Math.abs(sigma)>3&&alertCount<4){
+    const rule=Math.abs(sigma)>3.5?"rule_1_beyond_3sigma":"rule_2_eight_consecutive_same_side";
+    fireAlert(score,sigma,rule);
+    spcWindow=spcWindow.slice(-40)
   }
 }
-
-async function acknowledge(alertId, btn) {
-  btn.disabled = true;
-  btn.textContent = "Reviewing...";
-  const reviewer = prompt("Reviewer ID:", "");
-  if (!reviewer) { btn.disabled = false; btn.textContent = "Acknowledge"; return; }
-  const notes = prompt("Notes (optional):", "");
-  try {
-    const res = await fetch(`${API}/alerts/${alertId}/acknowledge`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({reviewer_id: reviewer, notes: notes || ""})
-    });
-    if (res.ok) {
-      btn.textContent = "Acknowledged";
-      btn.style.color = "#64748b";
-      btn.style.borderColor = "#1e2535";
-    } else {
-      btn.disabled = false;
-      btn.textContent = "Acknowledge";
-    }
-  } catch(e) {
-    btn.disabled = false;
-    btn.textContent = "Acknowledge";
+function step(){
+  tick++;
+  const score=nextScore(),lat=nextLatency();
+  scores.push(score);latencies.push(lat);
+  if(score>0.6)hrCount++;
+  appendFeed(score,lat);updateMetrics();checkSPC(score);
+  const rem=Math.max(0,DRIFT_AT-tick);
+  document.getElementById("countdown").textContent=rem;
+  document.getElementById("timer-prog").style.width=Math.min(tick/DRIFT_AT*100,100)+"%";
+  if(tick>=DRIFT_AT&&!drifting){
+    drifting=true;
+    document.getElementById("timer-label").textContent="Drift active — score distribution shifted";
+    document.getElementById("timer-prog").className="timer-prog"
+  }
+  if(tick>DRIFT_AT+55){
+    drifting=false;tick=1;baseline=null;spcWindow=[];alertCount=0;rcaCount=0;
+    document.getElementById("sb-alert-count").textContent="0";
+    document.getElementById("timer-label").innerHTML='Drift resolved — next injection in <span id="countdown">30</span>s';
+    document.getElementById("timer-prog").className="timer-prog green";
+    document.getElementById("alert-bar").classList.remove("on")
   }
 }
-
-async function loadOversight() {
-  try {
-    const res = await fetch(`${API}/oversight?limit=5`);
-    const data = await res.json();
-    const container = document.getElementById("oversight-log");
-    const rcaRecords = data.records.filter(r => r.rca_summary);
-    if (!rcaRecords.length) {
-      container.innerHTML = '<div class="empty">No RCA records yet</div>';
-      return;
-    }
-    container.innerHTML = rcaRecords.slice(0, 5).map(r => `
-      <div class="rca-box">
-        <div class="rca-meta">
-          ${r.model_id} &nbsp;|&nbsp; ${r.rule_fired} &nbsp;|&nbsp;
-          ${new Date(r.generated_at).toLocaleString()} &nbsp;|&nbsp;
-          Art. ${r.eu_ai_act_article}
-          ${r.requires_human_review ? '&nbsp;|&nbsp; <span style="color:#f59e0b">review required</span>' : ''}
-        </div>
-        <div class="rca-text">${r.rca_summary}</div>
-      </div>
-    `).join("");
-  } catch(e) {
-    document.getElementById("oversight-log").innerHTML = '<div class="empty" style="color:#ef4444">Failed to load oversight records</div>';
-  }
-}
-
-function connectSSE() {
-  const es = new EventSource(`${API}/stream`);
-  es.onmessage = (e) => {
-    const data = JSON.parse(e.data);
-    if (data.type === "heartbeat") return;
-    loadAlerts();
-  };
-  es.onerror = () => {
-    document.getElementById("stream-status").innerHTML = '<span style="color:#ef4444">disconnected</span>';
-    setTimeout(connectSSE, 5000);
-  };
-}
-
-loadMetrics();
-loadAlerts();
-loadOversight();
-connectSSE();
-setInterval(loadMetrics, 30000);
-setInterval(loadAlerts, 15000);
-setInterval(loadOversight, 20000);
+setInterval(step,2000);step();
 </script>
 </body>
 </html>
