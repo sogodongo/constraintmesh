@@ -1,6 +1,6 @@
 # ConstraintMesh
 
-**[Live Demo](https://constraint-mesh.vercel.app)** · **[GitHub](https://github.com/sogodongo/constraintmesh)**
+**[Live Demo](https://constraint-mesh.vercel.app)** 
 
 A data governance layer for high-risk AI systems, built around the technical obligations in the EU AI Act.
 
